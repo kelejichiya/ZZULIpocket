@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 学士帽：帽檐 + 帽身 + 流苏，落在自适应图标 72dp 安全区内 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,30 L82,42 L54,54 L26,42 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,49 L34,62 C34,68 43,73 54,73 C65,73 74,68 74,62 L74,49 L54,57 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M78.5,44 L81.5,44 L81.5,60 L78.5,60 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M80,60 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+</vector>

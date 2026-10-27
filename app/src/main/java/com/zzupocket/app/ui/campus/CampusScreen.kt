@@ -1,0 +1,169 @@
+package com.zzupocket.app.ui.campus
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Assessment
+import androidx.compose.material.icons.filled.Badge
+import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.CreditCard
+import androidx.compose.material.icons.filled.EventNote
+import androidx.compose.material.icons.filled.Login
+import androidx.compose.material.icons.filled.MeetingRoom
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
+import com.zzupocket.app.core.AppGraph
+
+/**
+ * 「校园」= 分组入口页（空教室已按需求从「课表」移到这里）。
+ *
+ * 只放用户功能入口；开发期的接口自检收在「登录状态」页里，且只在 debug 包显示。
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CampusScreen(
+    onOpenLogin: () -> Unit,
+    onOpenDiagnostics: () -> Unit,
+    onOpenElectricity: () -> Unit = {},
+    onOpenCard: () -> Unit = {},
+    onOpenAbout: () -> Unit = {},
+    onOpenAppearance: () -> Unit = {},
+    onOpenClassroom: () -> Unit = {},
+    onOpenGrades: () -> Unit = {},
+    onOpenExams: () -> Unit = {},
+    onOpenProfile: () -> Unit = {},
+) {
+    var loggedIn by remember { mutableStateOf(AppGraph.authRepository.isLoggedIn()) }
+    // 从登录页返回时重新读一次：这一页没有自己的 ViewModel，否则会一直显示"登录 / 切换账号"
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        loggedIn = AppGraph.authRepository.isLoggedIn()
+    }
+
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("更多") }) },
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(rememberScrollState()),
+        ) {
+            GroupTitle("账号")
+            EntryCard {
+                // 已登录时不要再把用户丢到登录表单上：他要的多半是"看看登录状态/换号"，
+                // 直接给表单会让人以为又要重新登录（issue #2 报告者提出）。
+                Entry(
+                    Icons.Filled.Login,
+                    if (loggedIn) "已登录" else "登录 / 切换账号",
+                    if (loggedIn) "查看登录状态，需要时可在那里退出登录" else "使用统一身份认证",
+                    if (loggedIn) onOpenDiagnostics else onOpenLogin,
+                )
+                Entry(Icons.Filled.Settings, "登录状态", "令牌有效期、本机数据统计", onOpenDiagnostics)
+                Entry(Icons.Filled.Info, "关于", "数据来源、隐私与致谢", onOpenAbout)
+            }
+
+            GroupTitle("学习空间")
+            EntryCard {
+                Entry(Icons.Filled.MeetingRoom, "空闲教室", "按周次/节次查没课的教室", onOpenClassroom)
+                Entry(Icons.Filled.Assessment, "成绩查询", "学业成绩（学校原版页面）", onOpenGrades)
+                Entry(Icons.Filled.EventNote, "考试安排", "考试时间、地点、座位号", onOpenExams)
+                Entry(Icons.Filled.Badge, "学籍信息", "基本信息与学籍档案", onOpenProfile)
+            }
+
+            GroupTitle("生活服务")
+            EntryCard {
+                Entry(Icons.Filled.Bolt, "电费", "待开发", {})
+                Entry(Icons.Filled.CreditCard, "校园卡", "待开发", {})
+            }
+
+            GroupTitle("外观")
+            EntryCard {
+                Entry(Icons.Filled.Palette, "配色与深色模式", "跟随壁纸动态取色，或选内置配色", onOpenAppearance)
+            }
+
+            Spacer(Modifier.height(24.dp))
+        }
+    }
+}
+
+@Composable
+private fun GroupTitle(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleSmall,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.padding(start = 20.dp, top = 16.dp, bottom = 6.dp),
+    )
+}
+
+@Composable
+private fun EntryCard(content: @Composable () -> Unit) {
+    Card(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp)) {
+        Column(content = { content() })
+    }
+}
+
+@Composable
+private fun Entry(
+    icon: ImageVector,
+    title: String,
+    subtitle: String,
+    onClick: (() -> Unit)? = null,
+) {
+    val enabled = onClick != null
+    ListItem(
+        headlineContent = { Text(title) },
+        supportingContent = {
+            Text(
+                subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        },
+        leadingContent = {
+            Icon(
+                icon,
+                contentDescription = null,
+                modifier = Modifier.size(22.dp),
+                tint = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
+            )
+        },
+        trailingContent = {
+            Icon(
+                Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.outline,
+            )
+        },
+        modifier = if (enabled) Modifier.clickable(onClick = onClick!!) else Modifier,
+    )
+}

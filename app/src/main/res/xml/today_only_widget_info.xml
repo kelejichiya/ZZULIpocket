@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  「今日课程」组件（目标 2×2 正方形）。
+
+  为什么固定成正方形：
+  · targetCellWidth/Height 都写 2，认新 API 的启动器直接给 2×2；
+  · minWidth 与 minHeight 都写 155dp，并把 resizeMode 设为 none，
+    老启动器也不会把它拉成长条 —— 用户明确要求 2×2 必须是正方形。
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/widget_today_only_desc"
+    android:initialLayout="@layout/widget_today_only"
+    android:minHeight="155dp"
+    android:minWidth="155dp"
+    android:previewLayout="@layout/widget_today_only_preview"
+    android:resizeMode="none"
+    android:targetCellHeight="2"
+    android:targetCellWidth="2"
+    android:updatePeriodMillis="1800000"
+    android:widgetCategory="home_screen" />

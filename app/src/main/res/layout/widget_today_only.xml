@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  2×2「今日课程」组件：照 WakeUp 课程表的卡片做 —— 深色圆角、顶部日期、下面 2 节课，
+  每节课左侧一条高饱和蓝色竖条。
+
+  外层 FrameLayout 只负责居中；真正的卡片固定 150×150dp。
+  这样即使启动器给的是 2×2 的矩形格子（很多启动器一行比一列高），
+  视觉上仍然是一张正方形卡片，不会被拉成长条。
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:background="@drawable/widget_card_dark"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/today_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="@string/widget_preview_today_header"
+            android:textColor="#E8E8ED"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:id="@+id/today_rows"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/today_empty"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/widget_preview_no_course"
+            android:textColor="#9A9AA2"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/today_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:textColor="#9A9AA2"
+            android:textSize="10sp" />
+    </LinearLayout>
+</FrameLayout>

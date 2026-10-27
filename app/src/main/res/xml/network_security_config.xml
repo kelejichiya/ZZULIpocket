@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  明文流量白名单（郑州轻工业大学）。
+
+  为什么需要：
+  - 统一身份认证 `kys.zzuli.edu.cn` 的根路径会 302 到 `http://kys.zzuli.edu.cn/cas`；
+  - 认证完成后页面会跳到 `http://iapp.zzuli.edu.cn/portal`（i轻大门户）。
+  Android 从 9 开始默认禁止明文 HTTP，不放行就直接报
+  `net::ERR_CLEARTEXT_NOT_PERMITTED`。
+
+  ⚠️ 只对这两个校内域名放行，其他一律仍然强制 HTTPS。
+  明文只用于学校自己的认证/门户跳转，App 仍然只保存会话、不保存密码。
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">kys.zzuli.edu.cn</domain>
+        <domain includeSubdomains="true">iapp.zzuli.edu.cn</domain>
+    </domain-config>
+</network-security-config>

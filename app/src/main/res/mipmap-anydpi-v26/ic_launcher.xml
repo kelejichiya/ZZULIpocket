@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  自适应图标（Android 8+）。
+  前景是用户提供的浅蓝色插画（放在 72dp 安全区内），背景取插画边缘的浅蓝，
+  这样系统裁成圆形/圆角方形时不会露出白边。
+-->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ic_launcher_background" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground_image" />
+</adaptive-icon>
